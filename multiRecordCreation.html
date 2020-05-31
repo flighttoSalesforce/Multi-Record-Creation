@@ -1,0 +1,97 @@
+<template>
+    <lightning-card  title="">
+        <div class="slds-p-horizontal_small">
+            <lightning-record-edit-form object-api-name="Contact">
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12" small-device-size="6" medium-device-size="4" large-device-size="6" padding="around-small">
+                        <lightning-input-field field-name="AccountId" onchange={handleAccountId}></lightning-input-field>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </lightning-record-edit-form><br/>
+           <template if:true={selectedAccount}>
+                <div>
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                        <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Select Contact">Select Contact</div>
+                            </th>  
+                            <th class="" scope="col">
+                            <div class="slds-truncate" title="Contact First Name">Contact First Name</div>
+                            </th>
+                            <th class="" scope="col">
+                            <div class="slds-truncate" title="Contact Last Name">Contact Last Name</div>
+                            </th>
+                            <th class="" scope="col">
+                            <div class="slds-truncate" title="Account Name">Account Name</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Action">Action</div>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <template if:true={contactDataWrp}>
+                                <template for:each={contactDataWrp} for:item="con" for:index="index">
+                                    <tr class="slds-hint-parent" key={con.Id}>
+                                        <td data-label="Select Contact">
+                                            <div class="slds-truncate" title="Select Contact">
+                                                <lightning-input type="checkbox" disabled={disabledCheckbox} name="input1"></lightning-input>
+                                            </div>
+                                        </td>
+                                        <td data-label="Contact First Name">
+                                            <div class="slds-truncate" title="First Name">{con.FirstName}</div>
+                                        </td>
+                                        <td data-label="Contact Last Name">
+                                            <div class="slds-truncate" title="Last Name">{con.LastName}</div>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <div class="slds-truncate" title="Account Name">{accountName}</div>
+                                        </td>
+                                        <td data-label="Action">
+                                            <div class="slds-truncate" title="Action">
+                                                <lightning-button label="Delete" variant="neutral" value={index} onclick={deleteRecord}></lightning-button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </template>
+                            <template if:true={blankRow}>
+                                <template for:each={blankRow} for:item="con" for:index="ind">
+                                    <tr class="slds-hint-parent" key={con.Id}>
+                                        <td data-label="Select Contact">
+                                            <div class="slds-truncate" title="Select Contact">
+                                                <lightning-input type="checkbox" name={ind} value={con.isChecked} onchange={setCheckBox}></lightning-input>
+                                            </div>
+                                        </td>
+                                        <td data-label="Contact First Name">
+                                        <lightning-input type="text" value={con.FirstName} placeholder="Contact First Name" name={ind} onchange={setFirstName}></lightning-input>
+                                        </td>
+                                        <td data-label="Contact Last Name">
+                                            <lightning-input type="text" value={con.LastName} placeholder="Contact Last Name" name={ind} onchange={setLastName}>></lightning-input>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning-record-view-form record-id={selectedAccount} object-api-name="Account">
+                                                <lightning-output-field field-name="Name" variant="label-hidden"></lightning-output-field>
+                                            </lightning-record-view-form>
+                                        </td>
+                                        <td data-label="Action">
+                                            <lightning-button label="Remove" variant="neutral" value={ind} onclick={removeRow}></lightning-button>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </template>
+        </div>
+        <div slot="footer">
+            <template if:true={selectedAccount}>
+                <lightning-button name="multipleRowSave" label="Save Conacts" class="slds-p-around_xx-small" variant="brand-outline" onclick={saveData}></lightning-button>
+                <lightning-button name="multipleRowAddition" label="Add Row" class="slds-p-around_xx-small" variant="brand" onclick={addRow}></lightning-button>
+                <lightning-button name="multipleRowRemoval" class="slds-p-around_xx-small" label="Remove Row" variant="destructive" onclick={removeRow}></lightning-button>
+            </template>
+        </div>
+    </lightning-card> 
+</template>
